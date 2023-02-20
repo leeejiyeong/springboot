@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<th:block layout:fragment="header">
+	<style>
+		.green {
+			background-color: green;
+		}
+	</style>
+</th:block>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!-- 1. 태그안에 써주기 2.태그쓰기 싫으면 대괄호 두개 안에 적어주기-->
+		총사원수: <span th:text=${#lists.size(empList)}>10000</span> <br>
+		총사원수: [[${#lists.size(empList)}]]
+		<table>
+			<tr>
+				<th>count</th>
+				<th>employee_id</th>
+				<th>first_name</th>
+				<th>last_name</th>
+				<th>입사일</th>
+				<th>급여</th>
+				<th>잡아이디</th>
+				<th>부서번호</th>
+			</tr>
+			<tr th:each="emp : ${empList}" th:class="${empStat.even?'green':''}">
+				<td th:text="${empStat.count}"></td>
+				<td th:text="${emp.employeeId}"></td>
+				<td th:text="${emp.firstName}"></td>
+				<td th:text="${emp.lastName}"></td>
+				<td th:text="${#dates.format(emp.hireDate, 'yyyy/MM/dd')}"></td>
+				<td th:text="${emp.salary}"></td>
+				<td th:text="${emp.jobId}"></td>
+				<td th:text="${emp.departmentId}"></td>
+				
+
+				<td>
+					<button th:if="${emp.salary}>10000">보너스</button>
+				</td>
+
+			</tr>
+		</table>
+	</div>
+
+	<footer th:replace="~{footer :: copy}"></footer>
+
+</body>
+</html>
