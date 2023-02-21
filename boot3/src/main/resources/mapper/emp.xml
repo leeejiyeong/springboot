@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="co.micol.demo.EmpMapper">
+
+	<select id="getJobList" resultType="map">
+	<!-- 별칭 사용 -->
+		select job_id "jobId",
+			   job_title "jobTitle" 
+		from jobs 
+		order by job_id
+	</select>
+	
 	<!-- 반복되는 sql문 중복을 방지하기 위해 id를 설정한후 쿼리문안에 include로 id만 넣어주면 된다. -->
 	<sql id="creiteria">
 		<where>
@@ -12,13 +21,13 @@
 				</if>
 		</where>
 	</sql>
-	<select id="getcountTotal" resultType="int">
+	<select id="getcountTotal" parameterType="EmpSearchVO" resultType="int">
 		select count(*)
 		from employees
 		<include refid="creiteria"></include>
 		
 	</select>
-	<select id="getEmpList" parameterType="EmpVO" resultType="EmpVO">
+	<select id="getEmpList" parameterType="EmpSearchVO" resultType="EmpVO">
 		select * from(select rownum rn, a.* from(
 		
 			SELECT * 
@@ -27,7 +36,7 @@
 			order by first_name
 			
 		<![CDATA[
-		) a where rownum <= #{last} ) b where rn > #{first}
+		) a where rownum <= #{last} ) b where rn >= #{first}
 		]]>
 	</select>
 

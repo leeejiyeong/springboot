@@ -14,7 +14,7 @@ public class EmpVO {
 	String departmentId;
 	String jobId;
 	
-	//페이징에서 변수로 사용하기 위함
-	Integer first;
-	Integer last;
+	//페이징에서 변수로 사용하기 위함(pageDTO사용하기 전에 썼던것)
+//	Integer first;
+//	Integer last;
 }

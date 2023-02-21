@@ -7,14 +7,52 @@
 <title>Insert title here</title>
 <th:block layout:fragment="header">
 	<style>
-		.green {
-			background-color: green;
-		}
-	</style>
+.green {
+	background-color: green;
+}
+</style>
 </th:block>
 </head>
+
+
 <body>
+
 	<div layout:fragment="content">
+		[[${jobList[0]}]]
+		<hr>
+		
+		<script>
+			function gopage(page) {
+				//location.href = "empList?page=" + page;
+				frmSearch.page.value= page;
+				frmSearch.submit();
+				//=> 값이 여러개라면 + 쓰고 "쓰고 하기 귀찮으니가 폼만들어서 한꺼번에 폼을 넘기면 된다.
+			}
+		</script>
+		<form name="frmSearch">
+			<input type="hidden" name="page" value="1">
+			<select name="jobId">
+				<option value="">선택
+				<option th:each="job : ${jobList}" 
+				th:text="${job.jobTitle}" 
+				th:value="${job.jobId}"
+				th:selected="${job.jobId}==${esvo.jobId}">
+			</select>
+			<input name="departmentId" th:value="${esvo.departmentId}">
+			<button>초기화</button>
+			<button>검색</button>
+		</form>
+		
+		
+		<!-- | 이작대기가 자바스크립트의 빽틱과 같은 역할 -->
+		<div>
+			<a
+				th:each="num : *{#numbers.sequence(paging.startPage, paging.endPage)}"
+				th:href="|javascript:gopage(${num})|"
+				th:class="${paging.page}==${num} ? 'active'"> [[${num}]] </a>
+		</div>
+
+
 		<!-- 1. 태그안에 써주기 2.태그쓰기 싫으면 대괄호 두개 안에 적어주기-->
 		총사원수: <span th:text=${#lists.size(empList)}>10000</span> <br>
 		총사원수: [[${#lists.size(empList)}]]
@@ -38,10 +76,10 @@
 				<td th:text="${emp.salary}"></td>
 				<td th:text="${emp.jobId}"></td>
 				<td th:text="${emp.departmentId}"></td>
-				
+
 
 				<td>
-					<button th:if="${emp.salary}>10000">보너스</button>
+					<button th:if="${emp.salary} != null and ${emp.salary}>10000">보너스</button>
 				</td>
 
 			</tr>
@@ -49,6 +87,6 @@
 	</div>
 
 	<footer th:replace="~{footer :: copy}"></footer>
-
+	</div>
 </body>
 </html>
