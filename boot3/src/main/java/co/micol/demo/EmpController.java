@@ -1,12 +1,19 @@
 package co.micol.demo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Collections;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -28,5 +35,36 @@ public class EmpController {
 		model.addAttribute("jobList", empMapper.getJobList());
 		log.debug("empList 실행~~");
 		return "empList";
+	}
+	
+	//조회
+	@GetMapping("/emp/{id}")
+	@ResponseBody	//java vo객체를 json구조의 string으로 변환을 해줌
+	public EmpVO getEmp(@PathVariable String id) {
+		return empMapper.getEmp(id);
+	}
+	
+	//등록
+	@PostMapping("/emp")
+	@ResponseBody
+	public EmpVO insertEmp(EmpVO vo) {
+		empMapper.insertEmp(vo);
+		return vo;
+	}
+	
+	//수정
+	@PutMapping("/emp")
+	@ResponseBody
+	public EmpVO updateEmp(@RequestBody EmpVO vo) {
+		empMapper.updateEmp(vo);
+		return vo;
+	}
+	
+	//삭제
+	@DeleteMapping("/emp/{id}")
+	@ResponseBody
+	public Map<String, Object> deleteEmp(@PathVariable String id) {
+		empMapper.deleteEmp(id);
+		return Collections.singletonMap("result", "success");
 	}
 }

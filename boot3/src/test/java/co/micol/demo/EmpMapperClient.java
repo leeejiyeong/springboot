@@ -18,7 +18,7 @@ public class EmpMapperClient {
 	@Test
 	public void 페이징() {	//테스트이기 때문에 메서드이름을 한글로 써도 상관없다.
 		
-		EmpVO vo = new EmpVO();
+		EmpSearchVO vo = new EmpSearchVO();
 		vo.setFirst(10);
 		vo.setLast(20);
 		List<EmpVO> list = empMapper.getEmpList(vo);
@@ -33,7 +33,7 @@ public class EmpMapperClient {
 	
 	@Test
 	public void 부서검색() {
-		EmpVO vo = new EmpVO();
+		EmpSearchVO vo = new EmpSearchVO();
 		//mapper쿼리에 페이징을 했기 때문에 페이지 설정을 해줘야한다.
 		vo.setFirst(1);
 		vo.setLast(10);

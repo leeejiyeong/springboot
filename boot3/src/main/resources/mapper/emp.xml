@@ -1,39 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="co.micol.demo.EmpMapper">
-
-	<select id="getJobList" resultType="map">
-	<!-- 별칭 사용 -->
-		select job_id "jobId",
-			   job_title "jobTitle" 
-		from jobs 
-		order by job_id
+	
+	<!-- 단건조회 -->
+	<select id="getEmp" parameterType="EmpVO" resultType="EmpVO">
+		select *
+		from employees
+		where employee_id = #{employeeId}
 	</select>
 	
+	<insert id="insertEmp" parameterType="EmpVO">
+		insert into employees (
+			employee_id,
+			first_name,
+			last_name,
+			email,
+			hire_date,
+			job_id
+		) 
+		values (
+			#{employeeId},
+			#{firstName},
+			#{lastName},
+			#{email},
+			#{hireDate},
+			#{jobId}
+		)
+	</insert>
+	
+	<!-- delete기능이라도 insert써도 상관없다(?) -->
+	<insert id="deleteEmp" parameterType="EmpVO">
+		delete from employees
+		where employee_id = #{employeeId}
+	</insert>
+
+	<update id="updateEmp" parameterType="EmpVO">
+		update employees
+		set first_name = #{firstName},
+			last_name = #{lastName},
+			email = #{email},
+			phone_number = #{phoneNumber},
+			job_id = #{jobId},
+			salary = #{salary}
+		where employee_id = #{employeeId}
+	</update>
+
+	<select id="getJobList" resultType="map">
+		<!-- 별칭 사용 -->
+		select job_id "jobId",
+				job_title "jobTitle"
+		from jobs
+		order by job_id
+	</select>
+
 	<!-- 반복되는 sql문 중복을 방지하기 위해 id를 설정한후 쿼리문안에 include로 id만 넣어주면 된다. -->
 	<sql id="creiteria">
 		<where>
-				<if test="departmentId != null and departmentId != '' ">
-					department_id = #{departmentId}
-				</if>
-				<if test="jobId != null and jobId != '' ">
-					AND job_id = #{jobId}
-				</if>
+			<if test="departmentId != null and departmentId != '' ">
+				department_id = #{departmentId}
+			</if>
+			<if test="jobId != null and jobId != '' ">
+				AND job_id = #{jobId}
+			</if>
 		</where>
 	</sql>
-	<select id="getcountTotal" parameterType="EmpSearchVO" resultType="int">
+	<select id="getcountTotal" parameterType="EmpSearchVO"
+		resultType="int">
 		select count(*)
 		from employees
 		<include refid="creiteria"></include>
-		
+
 	</select>
-	<select id="getEmpList" parameterType="EmpSearchVO" resultType="EmpVO">
+
+	<select id="getEmpList" parameterType="EmpSearchVO"
+		resultType="EmpVO">
 		select * from(select rownum rn, a.* from(
-		
-			SELECT * 
-			FROM EMPLOYEES
-			<include refid="creiteria"></include>
-			order by first_name
+
+		SELECT *
+		FROM EMPLOYEES
+		<include refid="creiteria"></include>
+		order by first_name
 			
 		<![CDATA[
 		) a where rownum <= #{last} ) b where rn >= #{first}
