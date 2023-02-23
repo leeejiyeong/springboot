@@ -1,11 +1,14 @@
 package co.micol.demo;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,10 +22,25 @@ import lombok.extern.log4j.Log4j2;
 
 @Controller
 @Log4j2
+@CrossOrigin(value="*")
 public class EmpController {
 	
 	@Autowired EmpMapper empMapper;
 	//Logger logger = LoggerFactory.getLogger(EmpController.class);
+	
+	
+	//aaa프로젝트랑 연결함(?). 다른프로젝트랑 연결하기
+	@PostMapping("/product")
+	@ResponseBody
+	public Map product(@RequestBody List<Map<String, Object>> list) {
+		System.out.println(list);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("result", "success");
+		map.put("size", list.size());
+		return map;
+	}
+	
+	
 	
 	@GetMapping("/empList")		//커멘드객체 => 모델에 저장
 	public String empList(Model model, @ModelAttribute("esvo") EmpSearchVO svo, Paging paging){
