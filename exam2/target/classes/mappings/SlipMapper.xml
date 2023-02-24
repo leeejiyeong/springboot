@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SlipDAO">
+
+<!-- 등록 -->
+<insert id="insertSlip">
+	<!-- selectKey를 사용하는 이유 : 
+		1. 바로 values에 서브쿼리로 통째로 집어넣어도 되지만 보기가 안좋자너..
+		slipNo변수로 주고 그 변수를 values에 적는거지....
+		2. insert한 후에 그 키값을 알아내서 다른데에 또쓰려면 단순 서브쿼리로는 안된다.
+		selectKey써야 그게 가능함. ex)장바구니-구매상품 이런식으로 테이블이 연결된경우
+		
+		order = "BEFORE" 이거는 INSERT하기전에 selectKey의 쿼리를 실행하라는 뜻
+		 -->
+	<selectKey keyProperty="slipNo" resultType="Integer" order="BEFORE">
+		select nvl(max(slip_no), #{salDt}||'000')+1
+		from slip
+		where sal_dt = #{salDt}
+	</selectKey>
+	INSERT INTO SLIP (SLIP_NO,
+						SLIP_AMOUNT,		
+						SLIP_DT,
+						SAL_DT,
+						CUSTOMER,		
+						BANK_ACCT)
+			VALUES ( #{slipNo},
+			         #{slipAmount},
+				     sysdate,
+				     #{salDt},
+				     #{customer},
+				     #{bankAcct}
+				)
+				
+</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
