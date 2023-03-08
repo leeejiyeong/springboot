@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+<h1>로그인 페이지</h1>
+${param.error}
+
+<!-- action값이 바뀌면 security-context에서 login-processing에서 이름을 적어주면 된다. -->
+<form action="login" method="post">
+
+  <dl>
+    <dt>
+    
+      로그인 ID
+    </dt>
+    <dd>
+      <input type="text" name="username">
+    </dd>
+    <dt>
+      패스워드
+    </dt>
+    <dd>
+      <input type="password" name="password">
+    </dd>
+  </dl>
+  <button>로그인</button>
+</form>
+</body>
+</html>
